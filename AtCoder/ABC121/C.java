@@ -6,43 +6,26 @@ public class Main {
 
         int n = sc.nextInt();
         int m = sc.nextInt();
-        long[] a = new long[n];
-        int[] b = new int[n];
+        long[][] a = new long[n][2];
+        int number = 0;
         long ans = 0;
-        int anscount = 0;
         for(int i =0; i < n; i++){
-            a[i] = sc.nextLong();
-            b[i] = sc.nextInt();
+            a[i][0] = sc.nextLong();
+            a[i][1] = sc.nextLong();
         }
-		for(int k = 0; k < n - 1; k++) { 
-            int pos = k;
-            for (int j = k + 1; k < n; j++) {
-                if (a[j] < a[pos]) {
-                    pos = j;
-                }
-            }
-            long w = a[k];
-            int y = b[k];
-            a[k] = a[pos];
-            a[pos] = w;
-            b[k] = b[pos];
-            b[pos] = y;
-
-        }
-        for(int d = 0; d < n; d++){
-            if(anscount == m){
-                break;
+        //ここまで値を格納するフェーズ
+        //値段の安い順を考慮して並べ替えるが、値段が重複してる部分を消さないようにする
+        Arrays.sort(a,(x,y)->Long.compare(x[0], y[0]));
+        //安い店から買っていく処理        
+        for(int i = 0; i < n; i++){
+            if(number + a[i][1] < m){
+                ans += a[i][0] * a[i][1];
+			    number += a[i][1];
             }else{
-                for(int e = 0; e < b[d]; e++){
-                    anscount = anscount + 1;
-                    ans = ans + a[d];
-                    if(anscount == m){
-                            break;
-                    } 
-                }
+                ans += a[i][0] * (m - number);
+				break;
             }
         }
         System.out.println(ans);
-
     }
 }
