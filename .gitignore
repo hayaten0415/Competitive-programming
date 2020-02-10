@@ -1,2 +1,4 @@
 .vscode/
 *.class
+C++_stl/
+test.exe
