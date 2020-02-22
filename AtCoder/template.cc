@@ -6,6 +6,16 @@ using ll = long long;
 const int MOD = 1000000007;
 const int MAX =200000;
 
+//繰り返し自乗法(modあり)
+ll RepeatSquaring(ll N, ll P, ll M){
+    if(P==0) return 1;
+    if(P%2==0){
+        ll t = RepeatSquaring(N, P/2, M);
+        return t*t % M;
+    }
+    return N * RepeatSquaring(N, P-1, M);
+}
+
 ll fac[MAX], finv[MAX], inv[MAX];
 // テーブルを作る前処理
 // n= 200000までのやつ
