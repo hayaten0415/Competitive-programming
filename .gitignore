@@ -1,4 +1,5 @@
 .vscode/
 *.class
+a.out
 C++_stl/
 test.exe
