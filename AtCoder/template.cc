@@ -41,6 +41,16 @@ ll COM(int n, int k){
   return fac[n] * (finv[k] * finv[n - k] % MOD) % MOD;
 }
 
+//ある数字nの各桁の和を求める
+int digitsum(int n) {
+  int res = 0;
+  while(n > 0) {
+    res += n % 10;
+    n /= 10;
+  }
+  return res;
+}
+
 //ユーグリッドの互除法による最大公約数を求めるメソッド
 ll gcd(ll a, ll b) {
   ll smaller = min(a, b);
