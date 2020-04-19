@@ -20,12 +20,13 @@ struct UnionFind {
     return root(x) == root(y);
   }
 
-  void merge(int x, int y) {
+  bool merge(int x, int y) {
     x = root(x); y = root(y);
-    if(x == y) return;
+    if(x == y) return false;
     if(par[x] > par[y]) swap(x,y);
     par[x] += par[y];
     par[y] = x;
+    return true;
   }
 
   int size(int x) {
