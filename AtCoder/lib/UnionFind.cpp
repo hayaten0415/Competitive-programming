@@ -27,4 +27,8 @@ struct UnionFind {
     par[x] += par[y];
     par[y] = x;
   }
+
+  int size(int x) {
+    return -par[root(x)];
+  }
 };
