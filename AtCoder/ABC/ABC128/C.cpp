@@ -4,9 +4,9 @@ using namespace std;
 using ll = long long;
 
 int main() {
-  int n, m;
-  cin >> n >> m;
-  int ans = n * (n - 1) / 2 + m * (m - 1) / 2;
-  cout << ans << endl;
+  int a, p;
+  cin >> a >> p;
+  int piece = 3 * a + p;
+  cout << piece / 2 << endl;
   return 0;
 }
