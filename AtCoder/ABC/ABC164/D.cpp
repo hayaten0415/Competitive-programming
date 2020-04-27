@@ -16,7 +16,7 @@ int main() {
     d[i] = (d[i+1]+a) % mod;
     ten *= 10; ten %= mod;
   }
-  vector<ll> cnt(s.size() + 1);
+  vector<ll> cnt(2019);
   ll ans = 0;
   for (int i = s.size(); i >= 0; --i) {
     ans += cnt[d[i]];
