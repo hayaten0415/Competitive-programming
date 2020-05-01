@@ -1,5 +1,6 @@
 .vscode/
 *.class
 a.out
+a.exe
 C++_stl/
 test.exe
