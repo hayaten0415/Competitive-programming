@@ -7,6 +7,16 @@ typedef long long ll;
 const int MOD = 1000000007;
 const int MAX =200000;
 
+//繰り返し自乗法(modなし)
+ll mypow(ll x, ll n){
+  if(n == 0)
+    return 1;
+ 
+  if(n % 2 == 0)
+    return mpow(x * x, n / 2);
+  else
+    return x * mpow(x, n - 1);
+}
 //繰り返し自乗法(modあり)
 ll RepeatSquaring(ll N, ll P, ll M){
     if(P==0) return 1;
