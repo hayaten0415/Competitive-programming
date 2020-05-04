@@ -10,6 +10,14 @@ const int dy[4] = {0, 1, 0, -1};
 const int MOD = 1000000007;
 const int MAX =200000;
 
+//ワーシャルフロイド法
+void warshall_floyd(int n) { // nは頂点数
+  for (int i = 0; i < n; i++)      // 経由する頂点
+    for (int j = 0; j < n; j++)    // 開始頂点
+      for (int k = 0; k < n; k++)  // 終端
+        dist[j][k] = min(dist[j][k], dist[j][i] + dist[i][k]);
+}
+
 //約数列挙 計算量O(sqrt(n))
 vector<long long> divisor(long long n) {
     vector<long long> ret;
