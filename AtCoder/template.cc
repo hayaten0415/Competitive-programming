@@ -10,6 +10,24 @@ const int dy[4] = {0, 1, 0, -1};
 const int MOD = 1000000007;
 const int MAX =200000;
 
+//素因数分解
+vector<pair<ll,ll>> prime_factorize(ll n) {
+  vector<pair<ll, ll>> res;
+  for (long long a = 2; a * a <= n; a++){
+    if(n % a != 0) continue;
+    ll ex = 0; //指数
+    while(n % a == 0){
+      ex++;
+      n /= a;
+    }
+    res.push_back(make_pair(a, ex));
+  }
+  if(n != 1){
+    res.push_back(make_pair(n, 1));
+  }
+  return res;
+}
+
 //ワーシャルフロイド法
 void warshall_floyd(int n) { // nは頂点数
   for (int i = 0; i < n; i++)      // 経由する頂点
