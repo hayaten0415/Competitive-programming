@@ -54,18 +54,19 @@ ll mypow(ll x, ll n){
     return 1;
  
   if(n % 2 == 0)
-    return mpow(x * x, n / 2);
+    return mypow(x * x, n / 2);
   else
-    return x * mpow(x, n - 1);
+    return x * mypow(x, n - 1);
 }
-//繰り返し自乗法(modあり)
-ll RepeatSquaring(ll N, ll P, ll M){
-    if(P==0) return 1;
-    if(P%2==0){
-        ll t = RepeatSquaring(N, P/2, M);
-        return t*t % M;
+
+long long modpow(long long a, long long n, long long mod) {
+    long long res = 1;
+    while (n > 0) {
+        if (n & 1) res = res * a % mod;
+        a = a * a % mod;
+        n >>= 1;
     }
-    return N * RepeatSquaring(N, P-1, M);
+    return res;
 }
 
 ll fac[MAX], finv[MAX], inv[MAX];
