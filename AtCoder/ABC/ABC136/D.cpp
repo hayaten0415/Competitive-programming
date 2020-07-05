@@ -6,25 +6,24 @@ using ll = long long;
 int main(){
   string s;
   cin >> s;
-  int num = 0;
-  vector<int> div;
-  bool nondiv = false;
-  char c = s.at(0);
-  rep(i, s.size() - 1){
-    if(!nondiv) {
-      if(c == s.at(i + 1)) {
-        continue;
-      }else {
-        nondiv = true;
-      }
-    }else {
-      if(c == s.at(i + 1)) {
-        continue;
-      }else {
-        nondiv = false;
-        div.push_back(i);
+  int n = s.size();
+  vector<int> ans(n);
+  rep(t, 2){
+    int cn = 0;
+    rep(i, n){
+      if(s[i] == 'R')cn++;
+      else{
+        ans[i] += cn / 2;
+        ans[i - 1] += (cn + 1) / 2;
+        cn = 0;
       }
     }
-    c = s.at(i + 1);
+    reverse(ans.begin(), ans.end());
+    reverse(s.begin(), s.end());
+    rep(i, n){
+      if(s[i] == 'R') s[i] ='L';
+      else s[i] = 'R';
+    }
   }
+  rep(i, n) cout << ans[i] << (i == n - 1 ? "\n" : " ");
 }
