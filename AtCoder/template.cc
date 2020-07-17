@@ -65,6 +65,27 @@ vector<long long> divisor(long long n) {
     sort(ret.begin(), ret.end()); // 昇順に並べる
     return ret;
 }
+
+const ll MAX_N = 100000;
+ll prime[MAX_N];
+bool is_prime[MAX_N + 1];
+
+//エラトステネスの篩
+ll sieve(ll n){
+  ll p = 0;
+  n = MAX_N;
+  for (int i = 0; i <= n; i++)
+    is_prime[i] = true;
+  is_prime[0] = is_prime[1] = false;
+  for (int i = 2; i <= n; i++){
+    if(is_prime[i]){
+      prime[p++] = i;
+      for (int j = 2 * i; j <= n; j += i)is_prime[j] = false;
+    }
+  }
+  return p;
+}
+
 //繰り返し自乗法(modなし)
 ll mypow(ll x, ll n){
   if(n == 0)
@@ -112,8 +133,8 @@ ll COM(int n, int k){
 }
 
 //ある数字nの各桁の和を求める
-int digitsum(int n) {
-  int res = 0;
+ll digitsum(ll n) {
+  ll res = 0;
   while(n > 0) {
     res += n % 10;
     n /= 10;
