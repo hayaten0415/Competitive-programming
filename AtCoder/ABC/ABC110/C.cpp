@@ -7,7 +7,6 @@ typedef long long ll;
 int main() {
   string s, t;
   cin >> s >> t;
-  bool cond = true;
   int n = s.size();
   if(n == 1){
     cout << "Yes" << endl;
