@@ -14,7 +14,7 @@ int main() {
   int cn = 0;
   if (s[0] == '0') cn++;
   for (int left = 0; left < n; ++left){
-    while (cn <= k && right < k){
+    while (cn <= k && right < n){
       if(right + 1 < n && s[right] == '1' && s[right +1] == '0')cn++;
       ++right;
     }
