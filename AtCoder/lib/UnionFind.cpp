@@ -14,7 +14,11 @@ struct UnionFind {
     if(par[x] < 0) return x;
     else return par[x] = root(par[x]);
   }
-
+  // データxが根かどうか
+  bool cond_root(int x){
+    if(par[x] < 0) return true;
+    else return false;
+  }
   //xとyが同じ集合に属するか
   bool issame(int x, int y) {
     return root(x) == root(y);
