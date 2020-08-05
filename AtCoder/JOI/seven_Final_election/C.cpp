@@ -24,8 +24,8 @@ int main() {
   rep(i, n){
     rep(j, n){
       if(m - a[i] - a[j]< 0)continue;
-      auto ite = lower_bound(ALL(b), m - a[i] - a[j]);
-      ite--;
+      auto ite = upper_bound(ALL(b), m - a[i] - a[j]);
+      if(ite != b.begin())ite--;
       ans = max(ans, a[i] + a[j] + *ite);
     }
   }
