@@ -15,15 +15,15 @@ ll ans = 0;
 
 void dfs(int sy, int sx){
   if(visited[sy][sx]) return;
-  if(grid[sy][sx] == 1){
-    ans++;
-    return;
-  }
   visited[sy][sx] = true;
   rep(i, 6) {
     int ny = sy + dy[i], nx = sx + dx[sy % 2][i];
     if(ny > h + 1 || nx > w + 1 || ny < 0 || nx < 0)continue;
     if(visited[ny][nx])continue;
+    if(grid[ny][nx] == 1){
+      ans++;
+      continue;
+    }
     dfs(ny, nx);
   }
 }
