@@ -48,6 +48,14 @@ struct Sieve {
   }
 };
 
+ll gcd(ll a, ll b) {
+  ll smaller = min(a, b);
+  ll bigger = max(a, b);
+  ll surplus = bigger % smaller;
+  if (surplus == 0) return smaller;
+  surplus = gcd(smaller, surplus);
+  return surplus;
+}
 
 int main() {
   Sieve sieve(1e6);
