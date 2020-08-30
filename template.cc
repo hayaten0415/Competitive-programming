@@ -13,6 +13,19 @@ const int dy[4] = {0, 1, 0, -1};
 const int MOD = 1000000007;
 const int MAX =200000;
 
+const int INF = (1 << 30);
+
+int LIS(vector<int> &A){
+  int n = A.size();
+  vector<int> dp(n, INF);
+  rep(i, n){
+    auto it = lower_bound(ALL(dp), A[i]);
+    *it = A[i];
+  }
+  return lower_bound(ALL(dp), INF) - dp.begin();
+}
+
+
 void syakutori{
   int right = 0;     
   for (int left = 0; left < n; ++left) {
