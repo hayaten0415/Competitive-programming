@@ -95,3 +95,13 @@ template<class T> struct BiCoef {
     }
 };
 using mint = Fp<1000000007>;
+
+
+mint choose(int n, int a) {
+  mint x = 1, y = 1;
+  rep(i,a) {
+    x *= n-i;
+    y *= i+1;
+  }
+  return x / y;
+}
