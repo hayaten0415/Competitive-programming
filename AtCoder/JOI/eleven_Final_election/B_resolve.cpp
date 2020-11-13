@@ -21,7 +21,7 @@ int main() {
     int index = i;
     int num = 0;
     rep(j, a){
-      if(index >= a)break;
+      if(index >= b)break;
       if(t[index] ==s[j]){
         num++;
         index++;
