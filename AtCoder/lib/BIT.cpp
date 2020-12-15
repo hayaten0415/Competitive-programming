@@ -17,6 +17,7 @@ struct BIT {
       d[i] += x;
     }
   }
+  
   T sum(int i) {
     T num = 0;
     for (i++; i; i -= i & -i){
@@ -24,7 +25,21 @@ struct BIT {
     }
     return num;
   }
+  /* [l, r), a and b are 1-indexed */
   T sum(int l, int r) {
     return sum(r - 1) - sum(l - 1);
+  }
+
+  int get(long long k) {
+      ++k;
+      int res = 0;
+      int N = 1; while (N < (int)d.size()) N *= 2;
+      for (int i = N / 2; i > 0; i /= 2) {
+          if (res + i < (int)d.size() && d[res + i] < k) {
+              k = k - dat[res + i];
+              res = res + i;
+          }
+      }
+      return res + 1;
   }
 };
