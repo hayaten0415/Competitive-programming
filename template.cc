@@ -25,6 +25,19 @@ int LIS(vector<int> &A){
   return lower_bound(ALL(dp), INF) - dp.begin();
 }
 
+int LDS(vector<int> &A){
+  int n = A.size();
+  deque<int> d;
+  rep(i, n){
+    int p = lower_bound(ALL(d), A[i]) - d.begin();
+    if(p == 0){
+      d.push_front(A[i]);
+    }else{
+      d[p - 1] = A[i];
+    }
+  }
+  return d.size();
+}
 
 void syakutori{
   int right = 0;     
@@ -197,6 +210,37 @@ bool isPrime(int num) {
     return true;
 }
 
+
+/**
+* 10進数 v を base進数の文字列へ変換する。
+* @param [in] v    10進数の整数
+* @param [in] base 変換した 2~36 のN進数の値
+* @return base進数へ変換した文字列
+*/
+template<typename TypeInt>
+std::string Itoa(const TypeInt v, int base)
+{
+	static const char table[] = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+	string ret;
+	static numeric_limits<TypeInt> t;
+	TypeInt n = v;
+	if (t.is_signed) {
+		if (v < 0) n *= -1;
+	}
+
+	while (n >= base) {
+		ret += table[n%base];
+		n /= base;
+	}
+	ret += table[n];
+	if (t.is_signed) {
+		if (v < 0 && base == 10) ret += '-';
+	}
+	// 文字列の順番を逆にする
+	std::reverse(ret.begin(), ret.end());
+
+	return ret;
+}
 int main() {
   return 0;
 }
