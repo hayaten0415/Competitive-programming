@@ -25,5 +25,5 @@ int main() {
       return 0;
     }
   }
-  cout << num  << endl;
+  cout << num << endl;
 }
