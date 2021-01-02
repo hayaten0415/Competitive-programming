@@ -241,6 +241,30 @@ std::string Itoa(const TypeInt v, int base)
 
 	return ret;
 }
+
+
+//グリッド回転
+vector<string> rev(vector<string> s) {
+	int h = s.size();
+	int w = s[0].size();
+	vector<string> res(w);
+	rep(i, w)res[i].resize(h);
+	rep(i, h)rep(j, w) {
+		res[j][h - 1 - i] = s[i][j];
+	}
+	return res;
+}
+
+//a進法でのnの桁和
+int digitsum(int n, int a){
+  int res = 0;
+  while(n > 0){
+    res += n % a;
+    n /= a;
+  }
+  return res;
+}
+
 int main() {
   return 0;
 }
