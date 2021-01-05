@@ -36,7 +36,7 @@ struct BIT {
       int N = 1; while (N < (int)d.size()) N *= 2;
       for (int i = N / 2; i > 0; i /= 2) {
           if (res + i < (int)d.size() && d[res + i] < k) {
-              k = k - dat[res + i];
+              k = k - d[res + i];
               res = res + i;
           }
       }
