@@ -10,16 +10,13 @@ template<class T> inline bool chmin(T& a, T b) { if (a > b) { a = b; return 1; }
 const int dx[4] = {1, 0, -1, 0};
 const int dy[4] = {0, 1, 0, -1};
 
-struct Edge{
-  int to;
-};
-using Graph = vector<vector<Edge>>;
+using Graph = vector<vector<int>>;
 
 vector<int> topo_sort(const Graph &G){
   int n = G.size();
   vector<int> ans;
   vector<int> ind(n);
-  rep(i, n) for (auto v : G[i]) ind[v.to]++;
+  rep(i, n) for (auto v : G[i]) ind[v]++;
   queue<int> que;
   rep(i, n) if(ind[i] == 0)que.push(i);
   while (!que.empty()){
@@ -27,8 +24,8 @@ vector<int> topo_sort(const Graph &G){
     que.pop();
     ans.emplace_back(v);
     for(auto e : G[v]){
-      ind[e.to]--;
-      if(ind[e.to] == 0)que.push(e.to);
+      ind[e]--;
+      if(ind[e] == 0)que.push(e);
     }
   }
   return ans;
@@ -41,9 +38,7 @@ int main() {
   rep(i, m){
     int a, b;
     cin >> a >> b;
-    Edge e;
-    e.to = b;
-    G[a].emplace_back(e);
+    G[a].emplace_back(b);
   }
   vector<int> ans = topo_sort(G);
   if(ans.size() == n){
