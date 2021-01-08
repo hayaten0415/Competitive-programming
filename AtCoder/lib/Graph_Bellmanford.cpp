@@ -56,6 +56,7 @@ int main() {
     ll c;
     cin >> a >> b >> c;
     a--, b--;
+    //有向グラフ想定
     v.push_back((Edge{a, b, -c}));
   }
   bellman_ford(0);
