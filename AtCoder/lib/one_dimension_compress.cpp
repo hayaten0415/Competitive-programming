@@ -11,6 +11,7 @@ const int dx[4] = {1, 0, -1, 0};
 const int dy[4] = {0, 1, 0, -1};
 
 
+//0-indexedに変換想定
 template <typename T>
 map<T, int> compress(vector<T> &X) {
   vector<T> vals = X;
