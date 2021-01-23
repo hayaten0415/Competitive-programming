@@ -13,9 +13,9 @@ const int dy[4] = {0, 1, 0, -1};
 int main() {
   int n;
   cin >> n;
-  vector<int> A(n);
+  vector<ll> A(n);
   rep(i, n) cin >> A[i];
-  int ans = 0;
+  ll ans = 0;
   if(A[0] != 0){
     cout << -1 << endl;
     return 0;
