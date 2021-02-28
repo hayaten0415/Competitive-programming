@@ -18,4 +18,6 @@ int main() {
   rep(i, n) rep(j, n) cin >> d[i][j];
   vector<vector<ll>> sum(n+1, vector<ll>(n+1, 0));
   rep(i, n) rep(j, n) sum[i + 1][j + 1] = sum[i][j + 1] + sum[i + 1][j] - sum[i][j] + d[i][j];
+  //左上[sx, sy], 右下(gx, gy)の矩形内の和を求める(半開区間)
+  int ans = sum[gx][gy] - sum[sx][gy] - sum[gx][sy] + sum[sx][sy];
 }
