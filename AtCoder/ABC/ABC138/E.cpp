@@ -22,7 +22,7 @@ int main() {
   ll n = s.size();
   ll m = t.size();
   vector<vector<ll>> alpha(26);
-  vector<int> S(26, 0), T(26, 0), start(26, -1);
+  vector<int> S(26, 0), T(26, 0);
   rep(i, n){
     int c = s[i] - 'a';
     S[c]++;
@@ -45,7 +45,7 @@ int main() {
   ll now = -2;
   rep(i, m){
     ll a = t[i] - 'a';
-    ll k = upper_bound(ALL(alpha[a]), start[a]) - alpha[a].begin();
+    ll k = upper_bound(ALL(alpha[a]), now) - alpha[a].begin();
     ll d = INF;
     if(k < alpha[a].size()){
       d = alpha[a][k];
@@ -57,7 +57,6 @@ int main() {
       d = alpha[a][0];
     }
     now = d;
-    start.assign(26, now);
     ans = (ll)loop * n + now + 1;
   }
   cout << ans << endl;
