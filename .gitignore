@@ -2,6 +2,7 @@
 *.class
 a.out
 a.exe
+t.txt
 C++_stl/
 cpp_make/
 test.exe
