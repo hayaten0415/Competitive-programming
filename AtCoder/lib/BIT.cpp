@@ -25,9 +25,9 @@ struct BIT {
     }
     return num;
   }
-  /* [l, r), a and b are 1-indexed */
+  /* [l, r), a and b are 0-indexed */
   T sum(int l, int r) {
-    return sum(r - 1) - sum(l - 1);
+    return sum(r) - sum(l);
   }
 
   int get(long long k) {
