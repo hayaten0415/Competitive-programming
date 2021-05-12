@@ -24,7 +24,7 @@ long long extgcd(long long a, long long b, long long &x, long long &y) {
 long long mod_inverse(long long a, long long b){
   long long x, y;
   extgcd(a, b, x, y);
-  return (a + x % b) % b;
+  return (b + x % b) % b;
 }
 
 int main(){
