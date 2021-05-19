@@ -65,6 +65,7 @@ struct Sieve_prime{
         res.push_back(res[i] * p);
       }
     }
+    sort(ALL(res));
     return res;
   }
 };
