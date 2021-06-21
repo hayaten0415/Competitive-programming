@@ -1,0 +1,53 @@
+#pragma region Macros
+// #pragma GCC target("avx2")
+#pragma GCC optimize("O3")
+#include <bits/stdc++.h>
+#include <atcoder/all>
+#define rep(i, n) for (int i = 0; i < (n); i++)
+#define rrep(i, n) for (int i = (n - 1); i >= 0; i--)
+#define ALL(v) v.begin(), v.end()
+#define endl "\n"
+#define popcount(bit) __builtin_popcount(bit)
+#define pb push_back
+#define eb emplace_back
+using namespace std;
+using namespace atcoder;
+using P = pair<int, int>;
+typedef long long ll;
+template<class T> inline bool chmax(T& a, T b) { if (a < b) { a = b; return 1; } return 0; }
+template<class T> inline bool chmin(T& a, T b) { if (a > b) { a = b; return 1; } return 0; }
+const int dx[4] = {1, 0, -1, 0};
+const int dy[4] = {0, 1, 0, -1};
+const int fx[8] = {0, 1, 1, 1, 0, -1, -1, -1};
+const int fy[8] = {1, 1, 0, -1, -1, -1, 0, 1};
+using Graph = vector<vector<int>>;
+Graph G;
+vector<int> treesize;
+vector<int> ans;
+int n;
+int dfs(int v, int pre){
+  for(auto d: G[v]){
+    if(d == pre)continue;
+    treesize[v] += dfs(d, v);
+    chmax(ans[v], treesize[d]);
+  }
+  chmax(ans[v], n - treesize[v]);
+  return treesize[v];
+}
+
+int main() {
+  cin >> n;
+  G.resize(n);
+  treesize.resize(n, 1);
+  for (int i = 1; i < n; i++){
+    int x;
+    cin >> x;
+    G[x].pb(i);
+    G[i].pb(x);
+  }
+  ans.resize(n, -1);
+  dfs(0, -1);
+  rep(i, n){
+    cout << ans[i] << endl;
+  }
+}
