@@ -97,6 +97,10 @@ template<class T> struct BiCoef {
         if (n < k || n < 0 || k < 0) return 0;
         return fact_[n] * finv_[k] * finv_[n-k];
     }
+    constexpr T P(int n, int k) const noexcept {
+        if (n < k || n < 0 || k < 0) return 0;
+        return fact_[n]  * finv_[n-k];
+    }
     constexpr T fact(int n) const noexcept {
         if (n < 0) return 0;
         return fact_[n];
