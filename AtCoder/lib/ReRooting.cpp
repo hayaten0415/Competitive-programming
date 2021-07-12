@@ -9,16 +9,17 @@ struct ReRooting
   using F = function<T(T, int)>;
   using F2 = function<T(T, T)>;
   static const int MAX_V = 200010;
-  int V;
   vector<int> E[MAX_V];
   vector<T> dp[MAX_V];
+  int V;
   //f(v) = g(merge(f(dp_c1,c1), f(dp_c2,c2), ..., f(dp_ck,ck)) , v)
-  F f, g;
+  F f;
   F2 merge;
   T mi; //identity of merge
+  F g;
 
-  ReRooting(int V_, F f_, F2 merge_, T mi_, F g_ = [](T a, int b) { return a; })
-      : V(V_), f(f_), merge(merge_), mi(mi_), g(g_) {}
+  ReRooting(int V_, F f_, F2 merge_, T mi_, F g_ = [](T a, int c) { return a; })
+    : V(V_), f(f_), merge(merge_), mi(mi_), g(g_) {}
 
   void add_E(int a, int b)
   {
@@ -29,7 +30,7 @@ struct ReRooting
   T dfs1(int p, int v)
   {
     T res = mi;
-    for (int i = 0; i < E[v].size(); ++i)
+    for (int i = 0; i < (int)E[v].size(); ++i)
     {
       if (E[v][i] == p)
         continue;
@@ -41,7 +42,7 @@ struct ReRooting
 
   void dfs2(int p, int v, T add)
   {
-    for (int i = 0; i < E[v].size(); ++i)
+    for (int i = 0; i < (int)E[v].size(); ++i)
     {
       if (E[v][i] == p)
       {
@@ -50,15 +51,15 @@ struct ReRooting
       }
     }
 
-    vector<T> pL(E[v].size() + 1), pR(E[v].size() + 1);
+    vector<T> pL((int)E[v].size() + 1), pR(E[v].size() + 1);
     pL[0] = mi;
-    for (int i = 0; i < E[v].size(); ++i)
+    for (int i = 0; i < (int)E[v].size(); ++i)
       pL[i + 1] = merge(pL[i], f(dp[v][i], E[v][i]));
     pR[E[v].size()] = mi;
-    for (int i = E[v].size(); i > 0; --i)
+    for (int i = (int)E[v].size(); i > 0; --i)
       pR[i - 1] = merge(pR[i], f(dp[v][i - 1], E[v][i - 1]));
 
-    for (int i = 0; i < E[v].size(); ++i)
+    for (int i = 0; i < (int)E[v].size(); ++i)
     {
       if (E[v][i] == p)
         continue;
@@ -70,7 +71,7 @@ struct ReRooting
   void calc(int root = 0)
   {
     for (int i = 0; i < V; ++i)
-      dp[i].resize(E[i].size());
+      dp[i].resize((int)E[i].size());
     dfs1(-1, root);
     dfs2(-1, root, mi);
   }
@@ -78,7 +79,7 @@ struct ReRooting
   T solve(int v)
   {
     T ans = mi;
-    for (int i = 0; i < E[v].size(); ++i)
+    for (int i = 0; i < (int)E[v].size(); ++i)
     {
       ans = merge(ans, f(dp[v][i], E[v][i]));
     }
