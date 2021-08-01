@@ -1,0 +1,54 @@
+#pragma region Macros
+// #pragma GCC target("avx2")
+#pragma GCC optimize("O3")
+#include <bits/stdc++.h>
+#define rep(i, n) for (int i = 0; i < (n); i++)
+#define rrep(i, n) for (int i = (n - 1); i >= 0; i--)
+#define ALL(v) v.begin(), v.end()
+#define pb push_back
+#define eb emplace_back
+#define endl "\n"
+#define popcount(bit) __builtin_popcount(bit)
+#define popcountll(bit) __builtin_popcountll(bit)
+using namespace std;
+using P = pair<int, int>;
+using PL = pair<long long, long long>;
+typedef long long ll;
+template<class T> inline bool chmax(T& a, T b) { if (a < b) { a = b; return 1; } return 0; }
+template<class T> inline bool chmin(T& a, T b) { if (a > b) { a = b; return 1; } return 0; }
+const int dx[3] = {-1, 0, 1};
+const int dy[3] = {0, -1, 0};
+const int fx[8] = {0, 1, 1, 1, 0, -1, -1, -1};
+const int fy[8] = {1, 1, 0, -1, -1, -1, 0, 1};
+const int INF = (1 << 30);
+
+void solve() {
+  int n;
+  cin >> n;
+  vector<string> grid(2);
+  rep(i, 2) cin >> grid[i];
+  int row = 0;
+  int now = 0;
+  for (now = 0; now < n; now++){
+    if (grid[row][now] >= '3') {
+			if (grid[row ^ 1][now] < '3') {
+				break;
+			} else {
+				row ^= 1;
+			}
+		}
+  }
+  if (now == n && row == 1) {
+		cout << "YES" << endl;
+		} else {
+		cout << "NO" << endl;
+	}
+}
+
+int main() {
+  cin.tie(0);
+  ios::sync_with_stdio(false);
+  int t;
+  cin >> t;
+  while(t--) solve();
+}
