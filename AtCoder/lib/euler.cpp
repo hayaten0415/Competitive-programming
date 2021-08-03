@@ -17,14 +17,14 @@ const int dy[4] = {0, 1, 0, -1};
 const int fx[8] = {0, 1, 1, 1, 0, -1, -1, -1};
 const int fy[8] = {1, 1, 0, -1, -1, -1, 0, 1};
 
-vector<int> euler_phi_table(int n) {
-  vector< int > euler(n + 1);
-  for(int i = 0; i <= n; i++) {
+vector<ll> euler_phi_table(ll n) {
+  vector< ll > euler(n + 1);
+  for(ll i = 0; i <= n; i++) {
     euler[i] = i;
   }
-  for(int i = 2; i <= n; i++) {
+  for(ll i = 2; i <= n; i++) {
     if(euler[i] == i) {
-      for(int j = i; j <= n; j += i) {
+      for(ll j = i; j <= n; j += i) {
         euler[j] = euler[j] / i * (i - 1);
       }
     }
