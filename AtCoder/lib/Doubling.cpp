@@ -21,23 +21,45 @@ const int dy[4] = {0, 1, 0, -1};
 const int fx[8] = {0, 1, 1, 1, 0, -1, -1, -1};
 const int fy[8] = {1, 1, 0, -1, -1, -1, 0, 1};
 
+struct Doubling{
+  vector<vector<ll>> next, sum;
+  Doubling(vector<ll> in, int log){
+    next.resize(log);
+    rep(i, log) next[i].resize(in.size());
+    rep(i, in.size()) next[0][i] = in[i];
+    for(int i=1;i<log;i++) rep(j,in.size()) next[i][j]=next[i-1][next[i-1][j]];
+    sum.resize(log);
+    rep(i, log) sum[i].resize(in.size());
+    rep(i, in.size()) sum[0][i] = i;
+    for(int i=1;i<log;i++) rep(j,in.size()) sum[i][j]=sum[i-1][j] + sum[i-1][next[i-1][j]];
+  }
+  ll oppose(ll now, ll k){
+    rep(i, next.size())if(k & (1ll << i)) now = next[i][now];
+    return now;
+  }
+  ll doublesum(ll now, ll k){//Σ[i=0..k-1]
+    ll res = 0;
+    rep(i, next.size()){
+      if (k & (1ll << i)){
+        res += sum[i][now];
+        now = next[i][now];
+      }
+    } 
+    return res;
+  }
+};
+//verify https://atcoder.jp/contests/abc167/tasks/abc167_d
+//verify https://atcoder.jp/contests/abc179/tasks/abc179_e
+
 int main() {
   int n;
   ll k;
   cin >> n >> k;
-  vector<vector<int>> next(60, vector<int>(n));
+  vector<ll> A(n);
   rep(i, n){
-    cin >> next[0][i];
-    next[0][i]--;
+    cin >> A[i];
+    A[i]--;
   }
-  for (int i = 0; i + 1 < 60; i++){
-    rep(j, n){
-      next[i + 1][j] = next[i][next[i][j]];
-    }
-  }
-  int now = 0;
-  rep(i, 60){
-    if(k & (1ll << i)) now = next[i][now];
-  }
-  cout << now + 1 << endl;
+  Doubling db(A, 60);
+  cout << db.oppose(0, k) + 1 << endl;
 }
