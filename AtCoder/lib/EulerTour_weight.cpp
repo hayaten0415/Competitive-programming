@@ -24,7 +24,8 @@ const int dx[4] = {1, 0, -1, 0};
 const int dy[4] = {0, 1, 0, -1};
 const int fx[8] = {0, 1, 1, 1, 0, -1, -1, -1};
 const int fy[8] = {1, 1, 0, -1, -1, -1, 0, 1};
-const ll INF = (1LL <<60);
+template <typename T>
+const auto INF = numeric_limits<T>::max();
 
 ll op(ll a, ll b) {
   return (a ^ b);
@@ -33,11 +34,13 @@ ll e() {
   return (ll)(0);
 }
 
+int parent[21][200002];
 int dep[200002];
 int in[200002];
 int out[200002];
 int tree_size[200002];
 vector<int> ls[200002];
+ll dis[200002];
 int k;
 Graph G;
 
@@ -47,23 +50,58 @@ vector<int> EularTour_V;
 //通った辺を並べたもの
 vector<int> EularTour_E;
 
-void dfs(int v,int p, int d, ll dist) {
+void dfs(int v,int p, int d, ll edge_dist, ll dist) {
   EularTour_V.pb(v);
-  EularTour_E.pb(dist);
+  EularTour_E.pb(edge_dist);
+  if(dis[v] == INF<ll>){
+    dis[v] = dist;
+  }
+  parent[0][v] = p;
   in[v] = k;
   k++;
   dep[v] = d;
   tree_size[v] = 1;
   for (auto [u, cost] : G[v]){
     if(u ==p)continue;
-    dfs(u, v, d + 1, cost);
+    dfs(u, v, d + 1, cost, dist + cost);
     EularTour_V.pb(v);
     tree_size[v] += tree_size[u];
   }
   out[v] = k;
-  EularTour_E.pb(-dist);
+  EularTour_E.pb(-edge_dist);
   k++;
 }
+
+void init(int N){
+  //parentを初期化する
+  rep(i,20){
+    rep(j, N){
+      if(parent[i][j] < 0)parent[i + 1][j] = -1;
+      else parent[i+1][j] = parent[i][parent[i][j]];
+    }
+  }
+}
+
+//uとvのLCAを求める
+int lca(int u, int v){
+  // uとvの深さが同じになるまで親を巡る
+  if(dep[u] > dep[v])swap(u, v);
+  for(int k = 0; k < 21; k++){
+    if((dep[v] - dep[u]) >> k & 1){
+      v = parent[k][v];
+    }
+  }
+  if(u == v)return u;
+  //二分探索でLCAを求める
+  for(int k = 20; k >= 0; k--){
+    if(parent[k][u] != parent[k][v]){
+        u = parent[k][u];
+        v = parent[k][v];
+    }
+  }
+  return parent[0][u];
+}
+
 
 //頂点iの部分木クエリは半開区間[in[i], out[i])となる。
 //in[i]のみに値を入れる,out[i]には単位元を入れるとセグ木が正しく動く(1点更新のみ)
@@ -72,11 +110,14 @@ void dfs(int v,int p, int d, ll dist) {
 // verify https://yukicoder.me/problems/no/1637
 // verify https://yukicoder.me/problems/no/1641
 // verify https://atcoder.jp/contests/abc202/tasks/abc202_e
+// verify https://atcoder.jp/contests/abc201/tasks/abc201_e
+// verify https://atcoder.jp/contests/abc209/tasks/abc209_d
 
 int main() {
   int n, q;
   cin >> n;
   G.resize(n);
+  rep(i, n) dis[i] = INF<ll>;
   rep(i, n-1){
     int a, b;
     ll c;
@@ -85,6 +126,7 @@ int main() {
     G[a].pb({b, c});
     G[b].pb({a,c});
   }
-  dfs(0, -1, 0, 0);
+  dfs(0, -1, 0, 0, 0);
+  init(n);
   cout << endl;
 }
