@@ -85,16 +85,16 @@ public:
     int sub_size(int u){
         return size[u];
     }
-    void path_query(int u, int v, function<void(int, int)> f) {
+    void path_query(int u, int v, function<void(int, int)> f, bool edge = false) {
         while (true) {
             if (in[u] > in[v]) swap(u, v);
-            f(max(in[head[v]], in[u]), in[v] + 1);
+            f(max(in[head[v]], in[u] + edge), in[v] + 1);
             if (head[u] == head[v]) return;
             v = par[head[v]];
         }
     }
-    void subtree_query(int v, function<void(int, int)> f) {
-        f(in[v], out[v]);
+    void subtree_query(int v, function<void(int, int)> f, bool edge = false) {
+        f(in[v] + edge, out[v]);
     }
 };
 
@@ -111,6 +111,9 @@ hl.path_query(u,v,[&](int l,int r){ //u,v間の頂点
 
 // verify https://mojacoder.app/users/milkcoffee/contests/pdc001/tasks/4
 // verify https://judge.yosupo.jp/problem/vertex_add_path_sum
+// verify https://judge.yosupo.jp/problem/vertex_add_subtree_sum
+// verify https://onlinejudge.u-aizu.ac.jp/problems/GRL_5_D
+// verify https://onlinejudge.u-aizu.ac.jp/courses/library/5/GRL/5/GRL_5_E
 
 int op(int a,int b){
     return gcd(a,b);
@@ -136,14 +139,14 @@ int main(void){
     rep(i,N){
         hl.path_query(i,i,[&](int l,int r){ //u,v間の頂点
             seg.set(l,A[i]);
-        });
+        }, 0);
     }
     int ans=0;
     for(int i=0;i<N;i++) for(int j=i+1;j<N;j++){
         int res=0;
         hl.path_query(i,j,[&](int l,int r){ //u,v間の頂点
             res=gcd(res,seg.prod(l,r));
-        });
+        }, 0);
         if(res==1) ans++;
     }
     cout << ans << endl;
