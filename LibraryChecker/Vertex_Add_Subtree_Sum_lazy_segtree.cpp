@@ -86,16 +86,16 @@ public:
     int sub_size(int u){
         return size[u];
     }
-    void path_query(int u, int v, function<void(int, int)> f) {
+    void path_query(int u, int v, function<void(int, int)> f, bool edge = false) {
         while (true) {
             if (in[u] > in[v]) swap(u, v);
-            f(max(in[head[v]], in[u]), in[v] + 1);
+            f(max(in[head[v]], in[u] + edge), in[v] + 1);
             if (head[u] == head[v]) return;
             v = par[head[v]];
         }
     }
-    void subtree_query(int v, function<void(int, int)> f) {
-        f(in[v], out[v]);
+    void subtree_query(int v, function<void(int, int)> f, bool edge = false) {
+        f(in[v] + edge, out[v]);
     }
 };
 

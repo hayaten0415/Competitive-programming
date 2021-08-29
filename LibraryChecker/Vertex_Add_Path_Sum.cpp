@@ -1,4 +1,6 @@
-#pragma GCC optimize("Ofast")
+#pragma region Macros
+// #pragma GCC target("avx2")
+#pragma GCC optimize("O3")
 #include <bits/stdc++.h>
 #include <atcoder/all>
 using namespace std;
@@ -84,30 +86,18 @@ public:
     int sub_size(int u){
         return size[u];
     }
-    void path_query(int u, int v, function<void(int, int)> f) {
+    void path_query(int u, int v, function<void(int, int)> f, bool edge = false) {
         while (true) {
             if (in[u] > in[v]) swap(u, v);
-            f(max(in[head[v]], in[u]), in[v] + 1);
+            f(max(in[head[v]], in[u] + edge), in[v] + 1);
             if (head[u] == head[v]) return;
             v = par[head[v]];
         }
     }
-    void subtree_query(int v, function<void(int, int)> f) {
-        f(in[v], out[v]);
+    void subtree_query(int v, function<void(int, int)> f, bool edge = false) {
+        f(in[v] + edge, out[v]);
     }
 };
-
-/*
-hl.subtree_query(v,[&](int l,int r){ //vを根とする部分木
-    seg.apply(l,r,num);
-});
-
-lint res=hoge;
-hl.path_query(u,v,[&](int l,int r){ //u,v間の頂点
-    res=max(res,seg.prod(l,r));
-});
-*/
-
 using S = ll;
 S op(S a, S b) { return a + b; }
 S e(){ return 0; }
@@ -128,7 +118,7 @@ int main(void){
   rep(i,N){
       hl.path_query(i,i,[&](int l,int r){ //u,v間の頂点
           seg.set(l,A[i]);
-      });
+      }, 0);
   }
 
   rep(i, Q){
@@ -140,14 +130,14 @@ int main(void){
       hl.path_query(a, a, [&](int l, int r) { //u,v間の頂点
         S d = seg.get(l);
         seg.set(l, d + b);
-      });
+      }, 0);
     }else{
       int b;
       cin >> b;
       ll sum = 0;
       hl.path_query(a, b, [&](int l, int r) { //u,v間の頂点
         sum = sum + seg.prod(l, r);
-      });
+      }, 0);
       cout << sum << endl;
     }
   }
