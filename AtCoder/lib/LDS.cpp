@@ -10,7 +10,7 @@ template<class T> inline bool chmin(T& a, T b) { if (a > b) { a = b; return 1; }
 const int dx[4] = {1, 0, -1, 0};
 const int dy[4] = {0, 1, 0, -1};
 
-//最長減少部分列
+//広義最長減少部分列
 int LDS(vector<ll> &A){
   int n = A.size();
   deque<ll> d;
