@@ -96,20 +96,40 @@ int main() {
     }
     while(!q.empty()){
       int v = q.front(); q.pop();
-      if (d[v]) continue;
-      d[v] = -1;
-      for (int e: revG[v]) {
-        if (d[e]) continue;
-        d[e] = 1;
-        for (int f: revG[e]) {
-            count[f]--;
-            if (!count[f]) {
-              q.push(f);
-            }
+      if(d[v] == -1){
+        for (int e: revG[v]) {
+          if (d[e]) continue;
+          d[e] = 1;
+          q.push(e);
+        }
+      }else{
+        for (int e: revG[v]) {
+          if (d[e]) continue;
+          count[e]--;
+          if(count[e] == 0){
+            d[e] = -1;
+            q.push(e);
+          }
         }
       }
     }
   };
+  //  while(!q.empty()){
+  //    int v = q.front(); q.pop();
+  //    if (d[v]) continue;
+  //    d[v] = -1;
+  //    for (int e: revG[v]) {
+  //      if (d[e]) continue;
+  //      d[e] = 1;
+  //      for (int f: revG[e]) {
+  //          count[f]--;
+  //          if (!count[f]) {
+  //            q.push(f);
+  //          }
+  //      }
+  //    }
+  //  }
+  //};
   auto f = [&](int x)-> bool {
     vector<int> d(2* n);
     rep(i, n){
