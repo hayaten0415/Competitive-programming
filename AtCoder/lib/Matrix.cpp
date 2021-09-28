@@ -380,6 +380,9 @@ struct UnionFind {
   int size(int x) {
     return -par[root(x)];
   }
+  void reset(int n){
+    par.assign(n,-1);
+  }
 };
 
 
