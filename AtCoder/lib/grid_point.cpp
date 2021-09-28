@@ -21,52 +21,59 @@ const double PI = acos(-1);
 
 
 
-template <typename T> struct Point{
-    static T EPS;
-    T x, y;
-    static void set_eps(T e) { EPS = e; }
-    Point(): x(0), y(0) {}
-    Point(T _x, T _y) : x(_x), y(_y) {}
-    Point(const std::pair<T, T> &p) : x(p.first), y(p.second) {}
-    Point(const std::complex<T> &p) : x(p.real()), y(p.imag()) {}
-    complex<T> to_complex() const noexcept { return {x, y}; }
-    Point operator+(const Point &b) const { return Point(x + b.x, y + b.y); }
-    Point operator-(const Point &b) const { return Point(x - b.x, y - b.y); }
-    Point operator*(const T b) const { return Point(x * b, y * b); }
-    Point operator*(const Point &b) const { return Point(x * b.x - y * b.y, x * b.y + y * b.x); }
-    Point operator/(const T b) const { return Point(x / b, y / b); }
-    bool operator==(const Point &b) const noexcept { return x == b.x and y == b.y; }
-    bool operator<(const Point &b) const noexcept { return x != b.x ? x < b.x : y < b.y; }
-    bool operator!=(const Point &b) const noexcept { return !((*this) == b); }
-    T cross(Point b) { return this->x * b.y - this->y * b.x; } //外積
-    T dot(Point b) { return this->x * b.x + this->y * b.y; }   //内積
-    T distance(Point v) { return sqrt((this->x - v.x) * (this->x - v.x) + (v.y - this->y) * (v.y - this->y)); }
-    T abs() { return sqrt(x * x + y * y); }
-    T abs2(){return x * x + y * y;}
-    T abscross(Point p) const noexcept { return std::abs(cross(p)); }
-    T arg() { return atan2(y, x); }
-    T norm() const noexcept { return std::sqrt(x * x + y * y); }
-    T norm2() const noexcept { return x * x + y * y; }
-    Point normalized() const { return (*this) / this->norm(); }
-    Point conj() const noexcept { return Point(x, -y); }
-    Point rotate(double theta) { return Point(cos(theta) * x - sin(theta) * y, sin(theta) * x + cos(theta) * y); }
-    Point rotate90() { return Point(-y, x); }
-    friend ostream &operator<<(ostream &os, Point &p) { return os << "(" << p.x << "," << p.y << ")"; }
-    friend istream &operator>>(istream &is, Point &a) { return is >> a.x >> a.y; }
+template <typename T_P> struct Point2d {
+    static T_P EPS;
+    static void set_eps(T_P e) { EPS = e; }
+    T_P x, y;
+    Point2d() : x(0), y(0) {}
+    Point2d(T_P x, T_P y) : x(x), y(y) {}
+    Point2d(const std::pair<T_P, T_P> &p) : x(p.first), y(p.second) {}
+    Point2d(const std::complex<T_P> &p) : x(p.real()), y(p.imag()) {}
+    std::complex<T_P> to_complex() const noexcept { return {x, y}; }
+    Point2d operator+(const Point2d &p) const noexcept { return Point2d(x + p.x, y + p.y); }
+    Point2d operator-(const Point2d &p) const noexcept { return Point2d(x - p.x, y - p.y); }
+    Point2d operator*(const Point2d &p) const noexcept { return Point2d(x * p.x - y * p.y, x * p.y + y * p.x); }
+    Point2d operator*(T_P d) const noexcept { return Point2d(x * d, y * d); }
+    Point2d operator/(T_P d) const noexcept { return Point2d(x / d, y / d); }
+    Point2d inv() const { return conj() / norm2(); }
+    Point2d operator/(const Point2d &p) const { return (*this) * p.inv(); }
+    bool operator<(const Point2d &r) const noexcept { return x != r.x ? x < r.x : y < r.y; }
+    bool operator==(const Point2d &r) const noexcept { return x == r.x and y == r.y; }
+    bool operator!=(const Point2d &r) const noexcept { return !((*this) == r); }
+    T_P dot(Point2d p) const noexcept { return x * p.x + y * p.y; }
+    T_P det(Point2d p) const noexcept { return x * p.y - y * p.x; }
+    T_P absdet(Point2d p) const noexcept { return std::abs(det(p)); }
+    T_P norm() const noexcept { return std::sqrt(x * x + y * y); }
+    T_P norm2() const noexcept { return x * x + y * y; }
+    T_P arg() const noexcept { return std::atan2(y, x); }
+    // rotate point/vector by rad
+    Point2d rotate(T_P rad) const noexcept {
+        return Point2d(x * std::cos(rad) - y * std::sin(rad), x * std::sin(rad) + y * std::cos(rad));
+    }
+    Point2d normalized() const { return (*this) / this->norm(); }
+    Point2d conj() const noexcept { return Point2d(x, -y); }
+    friend std::istream &operator>>(std::istream &is, Point2d &p) {
+        T_P x, y;
+        is >> x >> y;
+        p = Point2d(x, y);
+        return is;
+    }
+    friend std::ostream &operator<<(std::ostream &os, const Point2d &p) {
+        os << '(' << p.x << ',' << p.y << ')';
+        return os;
+    }
 };
+template <> double Point2d<double>::EPS = 1e-9;
+template <> long double Point2d<long double>::EPS = 1e-12;
+template <> long long Point2d<long long>::EPS = 0;
 
-
-template <> double Point<double>::EPS = 1e-9;
-template <> long double Point<long double>::EPS = 1e-12;
-template <> long long Point<long long>::EPS = 0;
-
-template <typename T>
-int ccw(const Point<T> &a, const Point<T> &b, const Point<T> &c) { // a->b->cの曲がり方
-    Point<T> v1 = b - a;
-    Point<T> v2 = c - a;
-    if (v1.cross(v2) > Point<T>::EPS) return 1;   // 左折
-    if (v1.cross(v2) < -Point<T>::EPS) return -1; // 右折
-    if (v1.dot(v2) < -Point<T>::EPS) return 2;  // c-a-b
+template <typename T_P>
+int ccw(const Point2d<T_P> &a, const Point2d<T_P> &b, const Point2d<T_P> &c) { // a->b->cの曲がり方
+    Point2d<T_P> v1 = b - a;
+    Point2d<T_P> v2 = c - a;
+    if (v1.det(v2) > Point2d<T_P>::EPS) return 1;   // 左折
+    if (v1.det(v2) < -Point2d<T_P>::EPS) return -1; // 右折
+    if (v1.dot(v2) < -Point2d<T_P>::EPS) return 2;  // c-a-b
     if (v1.norm() < v2.norm()) return -2;           // a-b-c
     return 0;                                       // a-c-b
 }
@@ -74,15 +81,15 @@ int ccw(const Point<T> &a, const Point<T> &b, const Point<T> &c) { // a->b->cの
 // Convex hull （凸包）
 // return: IDs of vertices used for convex hull, counterclockwise
 // include_boundary: If true, interior angle pi is allowed
-template <typename T>
-std::vector<int> convex_hull(const std::vector<Point<T>> &ps, bool include_boundary = false) {
+template <typename T_P>
+std::vector<int> convex_hull(const std::vector<Point2d<T_P>> &ps, bool include_boundary = false) {
     int n = ps.size();
     if (n <= 1) return std::vector<int>(n, 0);
-    std::vector<std::pair<Point<T>, int>> points(n);
+    std::vector<std::pair<Point2d<T_P>, int>> points(n);
     for (size_t i = 0; i < ps.size(); i++) points[i] = std::make_pair(ps[i], i);
     std::sort(points.begin(), points.end());
     int k = 0;
-    std::vector<std::pair<Point<T>, int>> qs(2 * n);
+    std::vector<std::pair<Point2d<T_P>, int>> qs(2 * n);
     auto ccw_check = [&](int c) { return include_boundary ? (c == -1) : (c <= 0); };
     for (int i = 0; i < n; i++) {
         while (k > 1 and ccw_check(ccw(qs[k - 2].first, qs[k - 1].first, points[i].first))) k--;
@@ -98,23 +105,23 @@ std::vector<int> convex_hull(const std::vector<Point<T>> &ps, bool include_bound
 }
 
 // Solve r1 + t1 * v1 == r2 + t2 * v2
-template <typename T>
-Point<T> lines_crosspoint(Point<T> r1, Point<T> v1, Point<T> r2, Point<T> v2) {
-    assert(v2.cross(v1) != 0);
-    return r1 + v1 * (v2.cross(r2 - r1) / v2.cross(v1));
+template <typename T_P>
+Point2d<T_P> lines_crosspoint(Point2d<T_P> r1, Point2d<T_P> v1, Point2d<T_P> r2, Point2d<T_P> v2) {
+    assert(v2.det(v1) != 0);
+    return r1 + v1 * (v2.det(r2 - r1) / v2.det(v1));
 }
 
 // Whether two segments s1t1 & s2t2 intersect or not (endpoints not included)
 // Google Code Jam 2013 Round 3 - Rural Planning
 // Google Code Jam 2021 Round 3 - Fence Design
-template <typename T> bool intersect_open_segments(Point<T> s1, Point<T> t1, Point<T> s2, Point<T> t2) {
+template <typename T> bool intersect_open_segments(Point2d<T> s1, Point2d<T> t1, Point2d<T> s2, Point2d<T> t2) {
     if (s1 == t1 or s2 == t2) return false; // Not segment but point
     int nbad = 0;
     for (int t = 0; t < 2; t++) {
-        Point<T> v1 = t1 - s1, v2 = t2 - s2;
+        Point2d<T> v1 = t1 - s1, v2 = t2 - s2;
         T den = v2.det(v1);
         if (den == 0) {
-            if (s1.cross(v1) == s2.cross(v1)) {
+            if (s1.det(v1) == s2.det(v1)) {
                 auto L1 = s1.dot(v1), R1 = t1.dot(v1);
                 auto L2 = s2.dot(v1), R2 = t2.dot(v1);
                 if (L1 > R1) std::swap(L1, R1);
@@ -125,7 +132,7 @@ template <typename T> bool intersect_open_segments(Point<T> s1, Point<T> t1, Poi
                 return false;
             }
         } else {
-            auto num = v2.cross(s2 - s1);
+            auto num = v2.det(s2 - s1);
             if ((0 < num and num < den) or (den < num and num < 0)) nbad++;
         }
         std::swap(s1, s2);
@@ -147,12 +154,12 @@ template <typename PointNd> bool is_point_on_open_segment(PointNd s, PointNd t, 
 
 // Convex cut
 // Cut the convex polygon g by line p1->p2 and return the leftward one
-template <typename T>
-std::vector<Point<T>> convex_cut(const std::vector<Point<T>> &g, Point<T> p1, Point<T> p2) {
+template <typename T_P>
+std::vector<Point2d<T_P>> convex_cut(const std::vector<Point2d<T_P>> &g, Point2d<T_P> p1, Point2d<T_P> p2) {
     assert(p1 != p2);
-    std::vector<Point<T>> ret;
+    std::vector<Point2d<T_P>> ret;
     for (int i = 0; i < (int)g.size(); i++) {
-        const Point<T> &now = g[i], &nxt = g[(i + 1) % g.size()];
+        const Point2d<T_P> &now = g[i], &nxt = g[(i + 1) % g.size()];
         if (ccw(p1, p2, now) != -1) ret.push_back(now);
         if ((ccw(p1, p2, now) == -1) xor (ccw(p1, p2, nxt) == -1)) {
             ret.push_back(lines_crosspoint(now, nxt - now, p1, p2 - p1));
@@ -162,14 +169,14 @@ std::vector<Point<T>> convex_cut(const std::vector<Point<T>> &g, Point<T> p1, Po
 }
 
 // 2円の交点 (ABC157F)
-template <typename T>
-std::vector<Point<T>> IntersectTwoCircles(const Point<T> &Ca, double Ra, const Point<T> &Cb, double Rb) {
+template <typename T_P>
+std::vector<Point2d<T_P>> IntersectTwoCircles(const Point2d<T_P> &Ca, double Ra, const Point2d<T_P> &Cb, double Rb) {
     double d = (Ca - Cb).norm();
     if (Ra + Rb < d) return {};
     double rc = (d * d + Ra * Ra - Rb * Rb) / (2 * d);
     double rs = sqrt(Ra * Ra - rc * rc);
-    Point<T> diff = (Cb - Ca) / d;
-    return {Ca + diff * Point<T>(rc, rs), Ca + diff * Point<T>(rc, -rs)};
+    Point2d<T_P> diff = (Cb - Ca) / d;
+    return {Ca + diff * Point2d<T_P>(rc, rs), Ca + diff * Point2d<T_P>(rc, -rs)};
 }
 
 // Solve |x0 + vt| = R (SRM 543 Div.1 1000, GCJ 2016 R3 C)
@@ -187,10 +194,11 @@ std::vector<Float> IntersectCircleLine(const PointNd &x0, const PointNd &v, Floa
 template <typename PointFloat>
 decltype(PointFloat::x) DistancePointLine(const PointFloat &p, const PointFloat &a, const PointFloat &b) {
     assert(a != b);
-    return (b - a).abscross(p - a) / (b - a).norm();
+    return (b - a).absdet(p - a) / (b - a).norm();
 }
 
 // Distance between point p <-> line segment ab
+// verify https://onlinejudge.u-aizu.ac.jp/services/room.html#ACPC2021Day2/problems/C
 template <typename PointFloat>
 decltype(PointFloat::x) DistancePointSegment(const PointFloat &p, const PointFloat &a, const PointFloat &b) {
     if (a == b) {
@@ -210,7 +218,7 @@ template <typename T> struct line{
     T a, b, c;
     line(): a(0), b(0), c(0) {}
     line(int _a, int _b, int _c): a(_a), b(_b), c(_c) {}
-    line(Point<T> p1, Point<T> p2): a(p2.y - p1.y), b(p1.x - p2.x), c(p2.cross(p1)) {}
+    line(Point2d<T> p1, Point2d<T> p2): a(p2.y - p1.y), b(p1.x - p2.x), c(p2.cross(p1)) {}
 };
 
 
@@ -220,12 +228,12 @@ int main() {
   double n;
   cin >> n;
   cout << fixed << setprecision(20);
-  Point<double> P, Q;
+  Point2d<double> P, Q;
   cin >> P.x >> P.y;
   cin >> Q.x >> Q.y;
-  Point M = (P + Q) / 2;
-  Point D = P - M;
-  Point D2 = D.rotate(2 * PI / n);
-  Point ans = D2 + M;
+  Point2d M = (P + Q) / 2;
+  Point2d D = P - M;
+  Point2d D2 = D.rotate(2 * PI / n);
+  Point2d ans = D2 + M;
   cout << ans.x << ' ' << ans.y << endl;
 }
