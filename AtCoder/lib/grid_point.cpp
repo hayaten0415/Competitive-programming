@@ -19,7 +19,7 @@ const int fy[8] = {1, 1, 0, -1, -1, -1, 0, 1};
 const double PI = acos(-1);
 
 
-
+// Reference https://github.com/hitonanode/cplib-cpp/blob/master/geometry/geometry.hpp
 
 template <typename T_P> struct Point2d {
     static T_P EPS;
