@@ -3,6 +3,8 @@
 #include <functional>
 using namespace std;
 
+// Referrence https://null-mn.hatenablog.com/entry/2020/04/14/124151
+
 template <typename T>
 struct ReRooting
 {
