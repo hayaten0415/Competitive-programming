@@ -53,6 +53,34 @@ const int fy[8] = {1, 1, 0, -1, -1, -1, 0, 1};
 template <typename T>
 const auto INF = numeric_limits<T>::max()/2;
 
+
+template <typename T>
+struct binary_indexed_tree{
+  int N;
+  vector<T> BIT;
+  binary_indexed_tree(int N): N(N), BIT(N + 1, 0){
+  }
+  void add(int i, T x){
+    i++;
+    while (i <= N){
+      BIT[i] += x;
+      i += i & -i;
+    }
+  }
+  T sum(int i){
+    T ans = 0;
+    while (i > 0){
+      ans += BIT[i];
+      i -= i & -i;
+    }
+    return ans;
+  }
+  T sum(int L, int R){
+    return sum(R) - sum(L);
+  }
+};
+
+
 template <typename T>
 vector<T> compress(vector<T> &X) {
   // ソートした結果を vals に
@@ -67,34 +95,20 @@ vector<T> compress(vector<T> &X) {
   return vals;
 }
 
-// verify https://atcoder.jp/contests/abc221/tasks/abc221_d
+using mint = modint998244353;
 
 int main() {
   int n;
   cin >> n;
-  vector<int> A(n), B(n);
-  vector<int> imos;
-  vector<int> cn2(n + 1);
-  rep(i, n){
-    int a, b;
-    cin >> a >> b;
-    A[i] = a;
-    B[i] = a + b;
-    imos.pb(A[i]);
-    imos.pb(B[i]);
+  vector<int> A(n);
+  rep(i, n) cin >> A[i];
+  mint div = mint(2).inv();
+  compress(A);
+  binary_indexed_tree<mint> bi(n+2);
+  mint ans = 0;
+  rrep(i, n){
+    ans += bi.sum(A[i], n) * mint(div).pow(i+1);
+    bi.add(A[i], mint(2).pow(i));
   }
-  vector<int> ans = compress(imos);
-  vector<int> imos2(ans.size());
-  int c = ans.size();
-  rep(i, 0, 2* n, 2){
-    imos2[imos[i]]++;
-    imos2[imos[i + 1]]--;
-  }
-  rep(i, c-1)imos2[i+1] += imos2[i];
-  rep(i, c-1){
-    cn2[imos2[i]] += (ans[i + 1] - ans[i]);
-  }
-  rep(i, 1 , n+1){
-    cout << cn2[i] << (i == n ? "\n" : " ");
-  }
+  cout << ans.val() << endl;
 }
