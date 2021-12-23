@@ -9,3 +9,5 @@ test.exe
 .cargo/
 template-cargo-lock.toml
 compete.toml
+target/
+testcases/
