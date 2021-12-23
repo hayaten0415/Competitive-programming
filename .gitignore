@@ -6,3 +6,6 @@ t.txt
 C++_stl/
 cpp_make/
 test.exe
+.cargo/
+template-cargo-lock.toml
+compete.toml
