@@ -1,0 +1,32 @@
+[package]
+name = "cf748"
+version = "0.1.0"
+edition = "2021"
+
+[[bin]]
+name = "cf748-a"
+path = "a.rs"
+
+[[bin]]
+name = "cf748-b"
+path = "b.rs"
+
+[[bin]]
+name = "cf748-c"
+path = "c.rs"
+
+[[bin]]
+name = "cf748-d1"
+path = "d1.rs"
+
+[[bin]]
+name = "cf748-e"
+path = "e.rs"
+
+[[bin]]
+name = "cf748-f"
+path = "f.rs"
+
+[[bin]]
+name = "cf748-g"
+path = "g.rs"
