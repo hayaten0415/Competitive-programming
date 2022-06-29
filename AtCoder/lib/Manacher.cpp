@@ -5,13 +5,14 @@ using namespace std;
 vector< int > manacher(string &s) {
   int n = s.size();
   string res = "";
-  for(int i = 0; i < n; i++){
-      res += s[i];
-      if(i != n-1){
-          res += '$';
-      }
-  }
-  s = res;
+  // 偶数文字の回文を判定したい場合は以下のような処理が必要
+  //for(int i = 0; i < n; i++){
+  //    res += s[i];
+  //    if(i != n-1){
+  //        res += '$';
+  //    }
+  //}
+  //s = res;
   vector< int > radius(s.size());
   int i = 0, j = 0;
   while(i < s.size()) {
