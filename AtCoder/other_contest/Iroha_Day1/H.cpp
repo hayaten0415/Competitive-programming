@@ -76,11 +76,11 @@ int main() {
   dp[0][0] = 0;
   rep(i, 17)rep(j, sum+1)rep(d, 10){
     if(dp[i][j] == INF<ll>)continue;
-    if(dp[i][j] + mypow(10, i) *+ d == num)continue;
+    if(dp[i][j] + mypow(10, i) * d == num)continue;
     ll ni = i + 1;
     ll nj = j + d;
     if(nj > sum)continue;
-    chmin(dp[ni][nj], dp[i][j] + mypow(10, i) *+ d);
+    chmin(dp[ni][nj], dp[i][j] + mypow(10, i) * d);
   }
   cout << dp[17][sum] << endl;
 }
