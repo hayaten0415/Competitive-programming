@@ -55,5 +55,6 @@ int main() {
   cin >> n;
   vector<int> A(n);
   rep(i, n) cin >> A[i];
+  //O(n)
   cout << accumulate(ALL(A), 0) << endl;
 }
